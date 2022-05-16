@@ -1,10 +1,13 @@
+import java.util.Objects;
 
 public abstract class OAHashTable implements IHashTable {
 	
 	private HashTableElement [] table;
+	private int freeSlots;
 	
 	public OAHashTable(int m) {
 		this.table = new HashTableElement[m];
+		this.freeSlots = m;
 		// TODO add to constructor as needed
 	}
 	
@@ -17,12 +20,36 @@ public abstract class OAHashTable implements IHashTable {
 	
 	@Override
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
-		// TODO implement insertion	
+		if (this.freeSlots == 0) {
+			throw new TableIsFullException(hte);
+		}
+		//TODO: key already exists
+		for (int i = 0; i < this.table.length; i++) {
+			int hashVal = Hash(hte.GetKey(), i);
+			HashTableElement current;
+			try {
+				current = this.table[hashVal];
+			} catch (NullPointerException e) {
+				current = null;
+			}
+			if (current.GetKey() == hte.GetKey()) {
+				throw new KeyAlreadyExistsException(hte);
+			}
+			if (current == null || current.getIsDeleted()) {
+				this.table[hashVal] = hte;
+				this.freeSlots--;
+				return;
+			}
+		}
 	}
 	
 	@Override
 	public void Delete(long key) throws KeyDoesntExistException {
-		// TODO implement deletion
+		HashTableElement element = Find(key);
+		if (element == null) {
+			throw new KeyDoesntExistException(key);
+		}
+		element.setIsDeleted(true);
 	}
 	
 	/**
