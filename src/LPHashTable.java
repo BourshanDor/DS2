@@ -1,4 +1,3 @@
-import java.util.Random;
 
 public class LPHashTable extends OAHashTable {
 	private final ModHash modHash;

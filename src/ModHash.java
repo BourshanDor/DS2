@@ -1,7 +1,6 @@
 import java.util.Random;
 
 public class ModHash {
-
 	private final int m;
 	private final long p;
 	private final int a;

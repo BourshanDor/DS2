@@ -80,7 +80,7 @@ public class Test {
 
     private static boolean testRandomStress(IHashTable ht) {
 
-        boolean VERBOSE = false;  // LOOK AT ME LOOK AT ME LOOK AT ME, THIS IS USEFUL
+        boolean VERBOSE = true;  // LOOK AT ME LOOK AT ME LOOK AT ME, THIS IS USEFUL
         // ^^^^^^^^^^ //
         // ^^^^^^^^^^ //
 
