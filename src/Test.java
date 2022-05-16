@@ -72,7 +72,7 @@ public class Test {
         result.add(new LPHashTable(m, p));
         result.add(new QPHashTable(m, p));
         result.add(new AQPHashTable(m, p));
-        result.add(new DoubleHashTable(m, p));
+        //result.add(new DoubleHashTable(m, p));
         return result;
     }
 
@@ -143,7 +143,10 @@ public class Test {
                     e2 = e.getClass().getName();
                 }
                 if (e1 != e2) { System.out.println("FAILED: find, e1 != e2: " + e1 + ", " + e2); return false; }
-                if (v2 != null && (v1.GetKey() != v2.GetKey() || v1.GetValue() != v2.GetValue())) { System.out.println("FAILED: find, v1 != v2"); return false; }
+                if (!Objects.equals(v1, v2)) {
+                    System.out.println("FAILED: find, v1 != v2");
+                    return false;
+                }
             }
         }
         return true;
@@ -157,7 +160,7 @@ public class Test {
             for (IHashTable ht : hashTables) {
                 if (!testRandomStress(ht)) {
                     System.out.println("in test case " + ht.getClass().getName());
-                    break;
+                    //break;
                 }
             }
         }

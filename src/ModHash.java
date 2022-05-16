@@ -15,7 +15,7 @@ public class ModHash {
 
 	public static ModHash GetFunc(int m, long p){
 		Random random = new Random();
-		int a = random.nextInt((int) p) + 1; // ensure a >= 1
+		int a = random.nextInt((int) p - 1) + 1; // ensure a >= 1
 		int b = random.nextInt((int) p);
 
 		return new ModHash(a, b, p, m);

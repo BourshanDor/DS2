@@ -60,6 +60,7 @@ public abstract class OAHashTable implements IHashTable {
 		if (element == null) {
 			throw new KeyDoesntExistException(key);
 		}
+		this.freeSlots++;
 		element.setIsDeleted(true);
 	}
 	
