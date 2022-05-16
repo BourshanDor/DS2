@@ -31,6 +31,9 @@ public abstract class OAHashTable implements IHashTable {
 	
 	@Override
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
+		if (Find(hte.GetKey()) != null) {
+			throw new KeyAlreadyExistsException(hte);
+		}
 		if (this.freeSlots == 0) {
 			throw new TableIsFullException(hte);
 		}
@@ -39,9 +42,6 @@ public abstract class OAHashTable implements IHashTable {
 			HashTableElement current;
 			try {
 				current = this.table[hashVal];
-				if (Objects.equals(current.GetKey(), hte.GetKey()) && !current.getIsDeleted()) {
-					throw new KeyAlreadyExistsException(hte);
-				}
 			} catch (NullPointerException e) {
 				current = null;
 			}
