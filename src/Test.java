@@ -72,7 +72,7 @@ public class Test {
         result.add(new LPHashTable(m, p));
         result.add(new QPHashTable(m, p));
         result.add(new AQPHashTable(m, p));
-        //result.add(new DoubleHashTable(m, p));
+        result.add(new DoubleHashTable(m, p));
         return result;
     }
 
@@ -83,12 +83,12 @@ public class Test {
         // ^^^^^^^^^^ //
 
         Random rng = new Random();
-        RealHashTable rht = new RealHashTable(15, 97);
+        RealHashTable rht = new RealHashTable(5000, 10009  );
 
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 1000; i++) {
             // choose random operation
             int randomOperation = rng.nextInt(3);  // insert delete or find
-            long key = rng.nextInt(20);
+            long key = rng.nextInt(1000);
 
             if (randomOperation == 0) {
                 if (VERBOSE) System.out.println("insert " + key);
@@ -156,7 +156,7 @@ public class Test {
         testFillup();
         System.out.println("test: random stress");
         for (int i = 0; i < 100; i++) {
-            List<IHashTable> hashTables = allHashTables(15, 97);
+            List<IHashTable> hashTables = allHashTables(5000, 10009);
             for (IHashTable ht : hashTables) {
                 if (!testRandomStress(ht)) {
                     System.out.println("in test case " + ht.getClass().getName());
