@@ -29,12 +29,13 @@ public abstract class OAHashTable implements IHashTable {
 			HashTableElement current;
 			try {
 				current = this.table[hashVal];
+				if (current.GetKey() == hte.GetKey()) {
+					throw new KeyAlreadyExistsException(hte);
+				}
 			} catch (NullPointerException e) {
 				current = null;
 			}
-			if (current.GetKey() == hte.GetKey()) {
-				throw new KeyAlreadyExistsException(hte);
-			}
+			
 			if (current == null || current.getIsDeleted()) {
 				this.table[hashVal] = hte;
 				this.freeSlots--;
