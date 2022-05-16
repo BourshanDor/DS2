@@ -8,13 +8,21 @@ public abstract class OAHashTable implements IHashTable {
 	public OAHashTable(int m) {
 		this.table = new HashTableElement[m];
 		this.freeSlots = m;
-		// TODO add to constructor as needed
 	}
 	
 	
 	@Override
 	public HashTableElement Find(long key) {
-		// TODO implement find
+		for (int i = 0; i < this.table.length; i++) {
+			int hashVal = Hash(key, i);
+			HashTableElement current = this.table[hashVal];
+			if (current == null) {
+				return null;
+			}
+			if (current.GetKey() == key) {
+				return current;
+			}
+		}
 		return null;
 	}
 	
@@ -23,7 +31,6 @@ public abstract class OAHashTable implements IHashTable {
 		if (this.freeSlots == 0) {
 			throw new TableIsFullException(hte);
 		}
-		//TODO: key already exists
 		for (int i = 0; i < this.table.length; i++) {
 			int hashVal = Hash(hte.GetKey(), i);
 			HashTableElement current;
