@@ -3,17 +3,20 @@ import java.util.Objects;
 public abstract class OAHashTable implements IHashTable {
 	
 	private HashTableElement [] table;
+	protected int tableLen;
 	private int freeSlots;
+
 	
 	public OAHashTable(int m) {
 		this.table = new HashTableElement[m];
+		this.tableLen = table.length;
 		this.freeSlots = m;
 	}
 	
 	
 	@Override
 	public HashTableElement Find(long key) {
-		for (int i = 0; i < this.table.length; i++) {
+		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
 			HashTableElement current = this.table[hashVal];
 			if (current == null) {
@@ -31,7 +34,7 @@ public abstract class OAHashTable implements IHashTable {
 		if (this.freeSlots == 0) {
 			throw new TableIsFullException(hte);
 		}
-		for (int i = 0; i < this.table.length; i++) {
+		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(hte.GetKey(), i);
 			HashTableElement current;
 			try {
