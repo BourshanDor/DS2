@@ -1,7 +1,4 @@
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Test {
     private static class HashIsI extends OAHashTable {
@@ -25,7 +22,7 @@ public class Test {
         }
 
         public void Insert(HashTableElement hte) throws TableIsFullException, KeyAlreadyExistsException {
-            if (real.get(hte.GetKey()) != null)
+            if (real.containsKey(hte.GetKey()) && !hte.getIsDeleted())
                 throw new KeyAlreadyExistsException(hte);
 
             real.put(hte.GetKey(), hte);
@@ -33,7 +30,7 @@ public class Test {
         }
 
         public void Delete(long key) throws KeyDoesntExistException {
-            if (real.get(key) == null)
+            if (!real.containsKey(key))
                 throw new KeyDoesntExistException(key);
 
             real.remove(key);
@@ -43,6 +40,7 @@ public class Test {
             return real.get(key);
         }
     }
+
 
     private static void testFillup() {
         System.out.println("test: fillup");
@@ -80,7 +78,7 @@ public class Test {
 
     private static boolean testRandomStress(IHashTable ht) {
 
-        boolean VERBOSE = true;  // LOOK AT ME LOOK AT ME LOOK AT ME, THIS IS USEFUL
+        boolean VERBOSE = false;  // LOOK AT ME LOOK AT ME LOOK AT ME, THIS IS USEFUL
         // ^^^^^^^^^^ //
         // ^^^^^^^^^^ //
 
@@ -96,24 +94,24 @@ public class Test {
                 if (VERBOSE) System.out.println("insert " + key);
                 // insert
                 HashTableElement hte = new HashTableElement(key, 1 + rng.nextInt(10000));
-                String e1 = "", e2 = "";
+                Exception e1 = new Exception(), e2 = new Exception();
                 boolean full = false;
                 try {
                     ht.Insert(hte);
                 } catch (IHashTable.TableIsFullException e) {
                     full = true;
                 } catch (Exception e) {
-                    e1 = e.getClass().getName();
+                    e1 = e;
                 }
                 if (!full) {
                     // don't insert if not full so as to have a consistent state
                     try {
                         rht.Insert(hte);
                     } catch (Exception e) {
-                        e2 = e.getClass().getName();
+                        e2 = e;
                     }
                 }
-                if (e1 != e2) { System.out.println("FAILED: insert, e1 != e2: " + e1 + ", " + e2); return false; }
+                if (!Objects.equals(e1.getClass(), e2.getClass())) { System.out.println("FAILED: insert, e1 != e2: " + e1 + ", " + e2); return false; }
             } else if (randomOperation == 1) {
                 if (VERBOSE) System.out.println("         delete " + key);
                 // delete
@@ -128,7 +126,7 @@ public class Test {
                 } catch (Exception e) {
                     e2 = e.getClass().getName();
                 }
-                if (e1 != e2) { System.out.println("FAILED: delete, e1 != e2: " + e1 + ", " + e2); return false; }
+                if (!e1.equals(e2)) { System.out.println("FAILED: delete, e1 != e2: " + e1 + ", " + e2); return false; }
             } else if (randomOperation == 2) {
                 if (VERBOSE) System.out.println("                  find " + key);
                 // find

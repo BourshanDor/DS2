@@ -23,7 +23,7 @@ public abstract class OAHashTable implements IHashTable {
 				return null;
 			}
 			if (current.GetKey() == key) {
-				return current;
+				return current.getIsDeleted() ? null : current;
 			}
 		}
 		return null;
@@ -39,7 +39,7 @@ public abstract class OAHashTable implements IHashTable {
 			HashTableElement current;
 			try {
 				current = this.table[hashVal];
-				if (current.GetKey() == hte.GetKey()) {
+				if (Objects.equals(current.GetKey(), hte.GetKey()) && !current.getIsDeleted()) {
 					throw new KeyAlreadyExistsException(hte);
 				}
 			} catch (NullPointerException e) {
