@@ -1,12 +1,48 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Experiments {
 
     public static void main(String[] args) throws Exception {
+        System.out.println("Q3.1 : ");
+        groupSize(6571);
         quadraticExp(false);
-        int m = 10000019;
-        compareRuntimes((int) Math.floor(m/2.0));
-        compareRuntimes((int) Math.floor((19.0 * m) / 20.0));
+//        int m = 10000019;
+//        compareRuntimes((int) Math.floor(m/2.0));
+//        compareRuntimes((int) Math.floor((19.0 * m) / 20.0));
+    }
+
+    public static void groupSize(int q) {
+        List<Integer> group1 = new ArrayList<>();
+        List<Integer> group2 = new ArrayList<>();
+        for (int i = 0; i < q ; i ++) {
+            group1.add((i*i)% q);
+            group2.add((((int)(Math.pow(-1,i)*i*i))% q + q) % q );
+        }
+        group1.sort((a,b)-> Integer.compare(a,b));
+        group2.sort((a,b)-> Integer.compare(a,b));
+        System.out.println("Size of group 1 is : " + countDifferentNumber(group1));
+        System.out.println("Size of group 2 is : " + countDifferentNumber(group2));
+
+    }
+
+    public static int countDifferentNumber ( List<Integer> arr){
+
+        int counter = 0 ;
+        int i = 0;
+
+        while (i <  arr.size() ){
+            counter ++ ;
+
+            while (i + 1 <  arr.size() && arr.get(i).equals(arr.get(i+1))){
+                    i++;
+            }
+
+            i ++;
+        }
+
+        return counter;
     }
 
     public static void quadraticExp(boolean alternating) {

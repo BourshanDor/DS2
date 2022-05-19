@@ -12,21 +12,46 @@ public abstract class OAHashTable implements IHashTable {
 		this.tableLen = table.length;
 		this.freeSlots = m;
 	}
-	
-	
-	@Override
-	public HashTableElement Find(long key) {
+
+	public int FindIndex(long key) {
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
 			HashTableElement current = this.table[hashVal];
 			if (current == null) {
-				return null;
+				return -1;
 			}
-			if (current.GetKey() == key) {
-				return current.getIsDeleted() ? null : current;
-			}
+
+
+				if (!(current instanceof DeletedHashTableElement) && current.GetKey() == key) {
+					return hashVal;
+//				return current.getIsDeleted() ? null : current;
+				}
+
 		}
-		return null;
+		return -1;
+	}
+	
+	@Override
+	public HashTableElement Find(long key) {
+		int index = this.FindIndex(key);
+		if (index == -1){
+			return null;
+		}
+		else {
+			return this.table[index];
+		}
+//		for (int i = 0; i < this.tableLen; i++) {
+//			int hashVal = Hash(key, i);
+//			HashTableElement current = this.table[hashVal];
+//			if (current == null) {
+//				return null;
+//			}
+//			if (current.GetKey() == key) {
+//				return current instanceof DeletedHashTableElement ? null : current;
+////				return current.getIsDeleted() ? null : current;
+//			}
+//		}
+//		return null;
 	}
 	
 	@Override
@@ -39,31 +64,44 @@ public abstract class OAHashTable implements IHashTable {
 		}
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(hte.GetKey(), i);
-			HashTableElement current;
-			try {
-				current = this.table[hashVal];
-			} catch (NullPointerException e) {
-				current = null;
-			}
+			HashTableElement current = this.table[hashVal];
+//			try {
+//				current = this.table[hashVal];
+//			} catch (NullPointerException e) {
+//				current = null;
+//			}
 			
-			if (current == null || current.getIsDeleted()) {
+			if (current == null || current instanceof DeletedHashTableElement) {
 				this.table[hashVal] = hte;
 				this.freeSlots--;
 				return;
 			}
 		}
 	}
-	
+
 	@Override
 	public void Delete(long key) throws KeyDoesntExistException {
-		HashTableElement element = Find(key);
-		if (element == null) {
+		int index  = FindIndex(key);
+		if (index == -1) {
 			throw new KeyDoesntExistException(key);
 		}
 		this.freeSlots++;
-		element.setIsDeleted(true);
+		DeletedHashTableElement element = new DeletedHashTableElement(this.table[index].GetKey(), this.table[index].GetValue());
+		this.table[index] = element;
 	}
-	
+
+
+//	@Override
+//	public void Delete(long key) throws KeyDoesntExistException {
+//		HashTableElement element = Find(key);
+//		if (element == null) {
+//			throw new KeyDoesntExistException(key);
+//		}
+//		this.freeSlots++;
+//		DeletedHashTableElement elem = new DeletedHashTableElement(element.GetKey(), element.GetValue());
+//		element.setIsDeleted(true);
+//	}
+//
 	/**
 	 * 
 	 * @param x - the key to hash

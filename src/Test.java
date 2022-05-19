@@ -22,7 +22,7 @@ public class Test {
         }
 
         public void Insert(HashTableElement hte) throws TableIsFullException, KeyAlreadyExistsException {
-            if (real.containsKey(hte.GetKey()) && !hte.getIsDeleted())
+            if (real.containsKey(hte.GetKey()) && ! (hte instanceof DeletedHashTableElement))
                 throw new KeyAlreadyExistsException(hte);
 
             real.put(hte.GetKey(), hte);
@@ -153,6 +153,8 @@ public class Test {
     }
 
     public static void main(String[] args) {
+
+
         testFillup();
         System.out.println("test: random stress");
         for (int i = 0; i < 100; i++) {
