@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IHashTableTest {
@@ -35,14 +37,14 @@ class IHashTableTest {
     @Test
     void insertThrowExist() throws IHashTable.KeyAlreadyExistsException, IHashTable.KeyDoesntExistException, IHashTable.TableIsFullException {
 
-        IHashTable linearTable = new LPHashTable(7, 7);
+        IHashTable linearTable = new LPHashTable(70000000, 1000000007);
 //        IHashTable quadraticTable = new QPHashTable(7, 7);
 //        IHashTable doubleTable = new DoubleHashTable(7, 7);
 //        IHashTable altTable = new AQPHashTable(7, 7);
 
         for (int i = 0; i < 6; i++) {
-            HashTableElement elem = new HashTableElement(i, i);
 
+            HashTableElement elem = new HashTableElement(7000L+i, 7000L);
             linearTable.Insert(elem);
             assertThrows(IHashTable.KeyAlreadyExistsException.class, () -> linearTable.Insert(elem));
 //            quadraticTable.Insert(elem);

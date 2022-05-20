@@ -9,7 +9,7 @@ public class AQPHashTable extends OAHashTable {
 	
 	@Override
 	public int Hash(long x, int i) {
-		int alt = (int) Math.pow((-1), i);
+		int alt = i % 2 == 0 ? 1 : -1 ;
 		int ret = (this.modHash.Hash(x) + alt*(i * i)) % this.tableLen;
 		return (ret + this.tableLen) % tableLen;
 	}

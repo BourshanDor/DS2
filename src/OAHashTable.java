@@ -6,6 +6,8 @@ public abstract class OAHashTable implements IHashTable {
 	protected int tableLen;
 	private int freeSlots;
 
+
+
 	
 	public OAHashTable(int m) {
 		this.table = new HashTableElement[m];
@@ -13,6 +15,12 @@ public abstract class OAHashTable implements IHashTable {
 		this.freeSlots = m;
 	}
 
+	public int getFreeSlots(){
+		return freeSlots;
+	}
+	public int getTableLen(){
+		return tableLen;
+	}
 	public int FindIndex(long key) {
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
@@ -20,24 +28,23 @@ public abstract class OAHashTable implements IHashTable {
 			if (current == null) {
 				return -1;
 			}
-
-
-				if (!(current instanceof DeletedHashTableElement) && current.GetKey() == key) {
-					return hashVal;
+			if (!(current instanceof DeletedHashTableElement) && current.GetKey() == key) {
+				return hashVal;
 //				return current.getIsDeleted() ? null : current;
-				}
+			}
 
 		}
-		return -1;
+		return -2;     // the sequence is full
 	}
 	
 	@Override
 	public HashTableElement Find(long key) {
 		int index = this.FindIndex(key);
-		if (index == -1){
+		if (index == -1 || index == -2 ){
 			return null;
 		}
 		else {
+
 			return this.table[index];
 		}
 //		for (int i = 0; i < this.tableLen; i++) {
@@ -56,10 +63,12 @@ public abstract class OAHashTable implements IHashTable {
 	
 	@Override
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
-		if (Find(hte.GetKey()) != null) {
+		int find = FindIndex(hte.GetKey());
+		if (find != -1 && find != -2)
+		{
 			throw new KeyAlreadyExistsException(hte);
 		}
-		if (this.freeSlots == 0) {
+		if (this.freeSlots == 0 || find == -2) {
 			throw new TableIsFullException(hte);
 		}
 		for (int i = 0; i < this.tableLen; i++) {
@@ -76,13 +85,14 @@ public abstract class OAHashTable implements IHashTable {
 				this.freeSlots--;
 				return;
 			}
+
 		}
 	}
 
 	@Override
 	public void Delete(long key) throws KeyDoesntExistException {
 		int index  = FindIndex(key);
-		if (index == -1) {
+		if (index == -1 || index == -2) {
 			throw new KeyDoesntExistException(key);
 		}
 		this.freeSlots++;

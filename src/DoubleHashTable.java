@@ -11,7 +11,7 @@ public class DoubleHashTable extends OAHashTable {
 	
 	@Override
 	public int Hash(long x, int i) {
-		return ((this.initialHash.Hash(x) + this.secondaryHash.Hash(x) * i)%this.tableLen);
+		return ((this.initialHash.Hash(x) + this.secondaryHash.Hash(x) * i)%this.tableLen );
 	}
 	
 }

@@ -1,15 +1,19 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Experiments {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Q3.1 : ");
-        groupSize(6571);
-        quadraticExp(false);
-//        int m = 10000019;
-//        compareRuntimes((int) Math.floor(m/2.0));
+//        System.out.println("Q3.1 : ");
+//        groupSize(6571);
+//        check ( );
+//        quadraticExp(true);
+        int m = 10000019;
+        for ( int i = 1 ; i < 5; i++) {
+            compareRuntimes((int) Math.floor(m / 2.0), i);
+        }
 //        compareRuntimes((int) Math.floor((19.0 * m) / 20.0));
     }
 
@@ -44,56 +48,109 @@ public class Experiments {
 
         return counter;
     }
+//    public static void check ( ) {
+//        Random random = new Random();
+//
+//        int b;
+//        long a;
+//        int m = 6571;
+//        long q = 1000000007;
+//        List<Integer> group1 = new ArrayList<>();
+//        QPHashTable hashTable =new QPHashTable(m, q);
+//
+//        for (int j = 0; j < m; j++) {
+//
+//                    b = random.nextInt(100);
+//                    a = b + (100 * j);
+//                    group1.add(hashTable.Hash(a,0));
+//
+//        }
+//        group1.sort((x, y) -> Integer.compare(x, y));
+//        return;
+//    }
 
     public static void quadraticExp(boolean alternating) {
         Random random = new Random();
         int b;
         long a;
-        int m = 6571;
+        int m = 6577;
         long p = 1000000007;
         HashTableElement element;
         for (int i = 0; i < 100; i++) {
-            IHashTable hashTable = alternating ? new AQPHashTable(m,p): new QPHashTable(m, p);
-//            System.out.println(i);
+            OAHashTable hashTable = alternating ? new AQPHashTable(m,p): new QPHashTable(m, p);
+            boolean flag = false;
             for (int j = 0; j < m; j++) {
                 try {
                     b = random.nextInt(100);
                     a = b + (100 * j);
                     element = new HashTableElement(a, j);
                     hashTable.Insert(element);
-                } catch (Exception e) {
-                    System.out.println(e.getClass());
-                    System.out.println(e.getMessage());
                 }
-            }
+                catch (Exception e) {
+                    System.out.println(e.getClass());
+                    flag = true;
+                    break;
+                }
 
+            }
+            if (flag){
+                break;
+            }
         }
     }
 
-    public static void compareRuntimes(int n) throws Exception {
+    public static void compareRuntimes(int n, int tableNumber) throws Exception {
         long p = 1000000007;
         int m = 10000019;
         long a, start, finish;
         int b;
         HashTableElement element;
         Random random = new Random();
+        IHashTable table;
         System.out.println("COMPARING FOR: n = " + n);
-        IHashTable lpTable = new LPHashTable(m, p);
-        IHashTable qpTable = new QPHashTable(m, p);
-        IHashTable aqpTable = new AQPHashTable(m, p);
-        IHashTable doubleTable = new DoubleHashTable(m, p);
-        IHashTable[] tables = {lpTable, qpTable, aqpTable, doubleTable};
-        for (IHashTable table : tables) {
-            start = System.nanoTime();
-            for (int i = 0; i < n; i++) {
-                b = random.nextInt(100);
-                a = b + (100L * i);
-                element = new HashTableElement(a, i);
+        switch (tableNumber){
+            case 1 : {
+
+                table = new LPHashTable(m, p);
+                break;
+            }
+            case 2 : {
+
+                table = new QPHashTable(m, p);
+                break;
+
+            }
+            case 3 : {
+
+                table = new AQPHashTable(m, p);
+                break;
+
+            }
+            case 4 : {
+
+                table = new DoubleHashTable(m, p);
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + tableNumber);
+        }
+
+        start = System.nanoTime();
+        for (int i = 0; i < n; i++) {
+            b = random.nextInt(100);
+            a = b + (100L * i);
+            element = new HashTableElement(a, i);
+            try{
                 table.Insert(element);
             }
-            finish = System.nanoTime();
-            double runtime = (finish - start)/1000000.0;
-            System.out.println("TABLE:" + table.getClass() + ", RUNTIME:" + runtime);
+            catch (Exception e){
+                System.out.println("There is a problem with: " + table.getClass());
+                break;
+            }
         }
+        finish = System.nanoTime();
+        double runtime = (finish - start)/1000000000.0;
+        System.out.println("TABLE:" + table.getClass() + ", RUNTIME:" + runtime + " Sec");
+
     }
 }

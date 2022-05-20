@@ -101,6 +101,7 @@ public class Test {
                 } catch (IHashTable.TableIsFullException e) {
                     full = true;
                 } catch (Exception e) {
+
                     e1 = e;
                 }
                 if (!full) {
@@ -108,6 +109,7 @@ public class Test {
                     try {
                         rht.Insert(hte);
                     } catch (Exception e) {
+
                         e2 = e;
                     }
                 }
@@ -119,11 +121,13 @@ public class Test {
                 try {
                     ht.Delete(key);
                 } catch (Exception e) {
+
                     e1 = e.getClass().getName();
                 }
                 try {
                     rht.Delete(key);
                 } catch (Exception e) {
+
                     e2 = e.getClass().getName();
                 }
                 if (!e1.equals(e2)) { System.out.println("FAILED: delete, e1 != e2: " + e1 + ", " + e2); return false; }
@@ -135,11 +139,13 @@ public class Test {
                 try {
                     v1 = ht.Find(key);
                 } catch (Exception e) {
+
                     e1 = e.getClass().getName();
                 }
                 try {
                     v2 = rht.Find(key);
                 } catch (Exception e) {
+
                     e2 = e.getClass().getName();
                 }
                 if (e1 != e2) { System.out.println("FAILED: find, e1 != e2: " + e1 + ", " + e2); return false; }
