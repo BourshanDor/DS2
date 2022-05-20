@@ -11,8 +11,9 @@ public class Experiments {
 //        check ( );
 //        quadraticExp(true);
         int m = 10000019;
-        for ( int i = 1 ; i < 5; i++) {
-            compareRuntimes((int) Math.floor(m / 2.0), i);
+        List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
+        for (int i = 1; i < 5; i++) {
+            compareRuntimes( i, seq);
         }
 //        compareRuntimes((int) Math.floor((19.0 * m) / 20.0));
     }
@@ -20,30 +21,30 @@ public class Experiments {
     public static void groupSize(int q) {
         List<Integer> group1 = new ArrayList<>();
         List<Integer> group2 = new ArrayList<>();
-        for (int i = 0; i < q ; i ++) {
-            group1.add((i*i)% q);
-            group2.add((((int)(Math.pow(-1,i)*i*i))% q + q) % q );
+        for (int i = 0; i < q; i++) {
+            group1.add((i * i) % q);
+            group2.add((((int) (Math.pow(-1, i) * i * i)) % q + q) % q);
         }
-        group1.sort((a,b)-> Integer.compare(a,b));
-        group2.sort((a,b)-> Integer.compare(a,b));
+        group1.sort((a, b) -> Integer.compare(a, b));
+        group2.sort((a, b) -> Integer.compare(a, b));
         System.out.println("Size of group 1 is : " + countDifferentNumber(group1));
         System.out.println("Size of group 2 is : " + countDifferentNumber(group2));
 
     }
 
-    public static int countDifferentNumber ( List<Integer> arr){
+    public static int countDifferentNumber(List<Integer> arr) {
 
-        int counter = 0 ;
+        int counter = 0;
         int i = 0;
 
-        while (i <  arr.size() ){
-            counter ++ ;
+        while (i < arr.size()) {
+            counter++;
 
-            while (i + 1 <  arr.size() && arr.get(i).equals(arr.get(i+1))){
-                    i++;
+            while (i + 1 < arr.size() && arr.get(i).equals(arr.get(i + 1))) {
+                i++;
             }
 
-            i ++;
+            i++;
         }
 
         return counter;
@@ -77,7 +78,7 @@ public class Experiments {
         long p = 1000000007;
         HashTableElement element;
         for (int i = 0; i < 100; i++) {
-            OAHashTable hashTable = alternating ? new AQPHashTable(m,p): new QPHashTable(m, p);
+            OAHashTable hashTable = alternating ? new AQPHashTable(m, p) : new QPHashTable(m, p);
             boolean flag = false;
             for (int j = 0; j < m; j++) {
                 try {
@@ -85,48 +86,44 @@ public class Experiments {
                     a = b + (100 * j);
                     element = new HashTableElement(a, j);
                     hashTable.Insert(element);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println(e.getClass());
                     flag = true;
                     break;
                 }
 
             }
-            if (flag){
+            if (flag) {
                 break;
             }
         }
     }
 
-    public static void compareRuntimes(int n, int tableNumber) throws Exception {
+    public static void compareRuntimes( int tableNumber , List<HashTableElement> sequence) throws Exception {
         long p = 1000000007;
         int m = 10000019;
         long a, start, finish;
-        int b;
-        HashTableElement element;
-        Random random = new Random();
         IHashTable table;
-        System.out.println("COMPARING FOR: n = " + n);
-        switch (tableNumber){
-            case 1 : {
+        System.out.println("COMPARING FOR: n = " + sequence.size());
+        switch (tableNumber) {
+            case 1: {
 
                 table = new LPHashTable(m, p);
                 break;
             }
-            case 2 : {
+            case 2: {
 
                 table = new QPHashTable(m, p);
                 break;
 
             }
-            case 3 : {
+            case 3: {
 
                 table = new AQPHashTable(m, p);
                 break;
 
             }
-            case 4 : {
+            case 4: {
 
                 table = new DoubleHashTable(m, p);
                 break;
@@ -136,21 +133,31 @@ public class Experiments {
         }
 
         start = System.nanoTime();
-        for (int i = 0; i < n; i++) {
-            b = random.nextInt(100);
-            a = b + (100L * i);
-            element = new HashTableElement(a, i);
-            try{
+        for (HashTableElement element : sequence) {
+            try {
                 table.Insert(element);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("There is a problem with: " + table.getClass());
                 break;
             }
         }
         finish = System.nanoTime();
-        double runtime = (finish - start)/1000000000.0;
+        double runtime = (finish - start) / 1000000000.0;
         System.out.println("TABLE:" + table.getClass() + ", RUNTIME:" + runtime + " Sec");
 
+    }
+
+    public static List<HashTableElement> randomSequence(int n) {
+        long a, b;
+        Random random = new Random();
+        HashTableElement element;
+        List<HashTableElement> sequence = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            b = random.nextInt(100);
+            a = b + (100L * i);
+            element = new HashTableElement(a, i);
+            sequence.add(element);
+        }
+        return sequence;
     }
 }
