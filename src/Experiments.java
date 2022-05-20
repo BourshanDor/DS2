@@ -10,11 +10,23 @@ public class Experiments {
 //        groupSize(6571);
 //        check ( );
 //        quadraticExp(true);
+        double [] average = {0,0,0,0};
         int m = 10000019;
-        List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
-        for (int i = 1; i < 5; i++) {
-            compareRuntimes( i, seq);
+        for (int j = 0; j < 100 ; j ++) {
+            List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
+            for (int i = 1; i < 5; i++) {
+                double time  = compareRuntimes( i, seq);
+                average[i-1] +=  time ;
+            }
         }
+
+            System.out.println("LPHashTable: " + average[0]/100);
+            System.out.println("QPHashTable: " + average[1]/100);
+            System.out.println("AQPHashTable: " + average[2]/100);
+            System.out.println("DoubleHashTable: " + average[3]/100);
+
+
+
 //        compareRuntimes((int) Math.floor((19.0 * m) / 20.0));
     }
 
@@ -99,12 +111,12 @@ public class Experiments {
         }
     }
 
-    public static void compareRuntimes( int tableNumber , List<HashTableElement> sequence) throws Exception {
+    public static double compareRuntimes( int tableNumber , List<HashTableElement> sequence) throws Exception {
         long p = 1000000007;
         int m = 10000019;
         long a, start, finish;
         IHashTable table;
-        System.out.println("COMPARING FOR: n = " + sequence.size());
+//        System.out.println("COMPARING FOR: n = " + sequence.size());
         switch (tableNumber) {
             case 1: {
 
@@ -143,7 +155,8 @@ public class Experiments {
         }
         finish = System.nanoTime();
         double runtime = (finish - start) / 1000000000.0;
-        System.out.println("TABLE:" + table.getClass() + ", RUNTIME:" + runtime + " Sec");
+        return runtime;
+//        System.out.println("TABLE:" + table.getClass() + ", RUNTIME:" + runtime + " Sec");
 
     }
 
