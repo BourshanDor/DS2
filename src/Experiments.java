@@ -33,14 +33,14 @@ public class Experiments {
 //        for (int j = 0; j < 1 ; j ++) {
 //            List<HashTableElement> seq = randomSequence((int) Math.floor((19.0 * m) / 20.0));
 //            for (int i = 1; i < 5; i++) {
-//                if (i == 3){
-//                    continue;
-//                }
+////                if (i == 3){
+////                    continue;
+////                }
 //                double time  = compareRuntimes( i, seq);
 //                average[i-1] +=  time ;
 //            }
 //        }
-//
+
 //        System.out.println("LPHashTable: " + average[0]);
 //        System.out.println("QPHashTable: " + average[1]);
 //        System.out.println("AQPHashTable: " + average[2]);

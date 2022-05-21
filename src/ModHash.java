@@ -1,13 +1,14 @@
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ModHash {
 	private final int m;
 	private final long p;
-	private final int a;
-	private final int b;
+	private final long a;
+	private final long b;
 
 
-	public ModHash(int a, int b, long p, int m) {
+	public ModHash(long a, long b, long p, int m) {
 		this.a = a;
 		this.b = b;
 		this.p = p;
@@ -15,9 +16,8 @@ public class ModHash {
 	}
 
 	public static ModHash GetFunc(int m, long p){
-		Random random = new Random();
-		int a = random.nextInt((int) p - 1) + 1; // ensure a >= 1
-		int b = random.nextInt((int) p);
+		long a = ThreadLocalRandom.current().nextLong(1, p);
+		long b = ThreadLocalRandom.current().nextLong(0, p);
 
 		return new ModHash(a, b, p, m);
 	}
@@ -28,20 +28,19 @@ public class ModHash {
 
 	public static class StepHash {
 		private final int m;
-		private final int t;
+		private final long t;
 
-		public StepHash(int m, int t) {
+		public StepHash(int m, long t) {
 			this.m = m;
 			this.t = t;
 		}
 		public static StepHash GetFunc(int m){
-			Random random = new Random();
-			int t = random.nextInt((int) m - 1) + 1; // ensure a >= 1
+			long t = ThreadLocalRandom.current().nextLong(1, m); // ensure a >= 1
 			return new StepHash(m,t);
 		}
 
-		public int Hash(long key) {
-			return (int) (key) % this.t + 1;
+		public long Hash(long key) {
+			return (int) ((key) % this.t) + 1;
 		}
 
 	}

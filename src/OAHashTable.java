@@ -24,6 +24,9 @@ public abstract class OAHashTable implements IHashTable {
 	public int FindIndex(long key) {
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
+			if (hashVal < 0) {
+				System.out.println("");
+			}
 			HashTableElement current = this.table[hashVal];
 			if (current == null) {
 				return -1;
