@@ -14,12 +14,12 @@ public class Experiments {
         question5();
         double [] average = {0,0,0,0};
         int m = 10000019;
-        for (int j = 0; j < 10 ; j ++) {
+        for (int j = 0; j < 100 ; j ++) {
             List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
-            for (int i = 1; i < 5; i++) {
-                double time  = compareRuntimes( i, seq);
-                average[i-1] +=  time ;
-            }
+//            for (int i = 1; i < 5; i++) {
+                double time  = compareRuntimes( 2, seq);
+                average[2-1] +=  time ;
+//            }
         }
 
             System.out.println("LPHashTable: " + average[0]/10);
@@ -27,13 +27,13 @@ public class Experiments {
             System.out.println("AQPHashTable: " + average[2]/10);
             System.out.println("DoubleHashTable: " + average[3]/10);
 
-//
+
 //        double [] average = {0,0,0,0};
 //        int m = 10000019;
 //        for (int j = 0; j < 1 ; j ++) {
 //            List<HashTableElement> seq = randomSequence((int) Math.floor((19.0 * m) / 20.0));
 //            for (int i = 1; i < 5; i++) {
-//                if (i == 3){
+//                if (i == 2){
 //                    continue;
 //                }
 //                double time  = compareRuntimes( i, seq);
@@ -42,10 +42,10 @@ public class Experiments {
 //        }
 //
 //        System.out.println("LPHashTable: " + average[0]);
-//        System.out.println("QPHashTable: " + average[1]);
+////        System.out.println("QPHashTable: " + average[1]);
 //        System.out.println("AQPHashTable: " + average[2]);
 //        System.out.println("DoubleHashTable: " + average[3]);
-//
+////
     }
 
     public static void groupSize(int q) {
@@ -161,7 +161,7 @@ public class Experiments {
             try {
                 table.Insert(element);
             } catch (Exception e) {
-                System.out.println("There is a problem with: " + table.getClass());
+                System.out.println("There is a problem with: " + table.getClass() + "Exception: "  + e.getClass());
                 break;
             }
         }

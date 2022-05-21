@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.math.BigInteger;
 
 public class DoubleHashTable extends OAHashTable {
 	private final ModHash initialHash;
@@ -11,7 +11,37 @@ public class DoubleHashTable extends OAHashTable {
 	
 	@Override
 	public int Hash(long x, int i) {
-		return ((this.initialHash.Hash(x) + this.secondaryHash.Hash(x) * i)%this.tableLen );
+		int a = this.initialHash.Hash(x);
+		int b = this.secondaryHash.Hash(x);
+		int B_mult_I = b*i ;
+		int expectedValue = (a + B_mult_I) % this.tableLen;
+
+		BigInteger secondHash;
+		BigInteger index;
+		BigInteger mult;
+		BigInteger len;
+		BigInteger firstHash;
+
+		if ( B_mult_I*i < 0 ){
+			 secondHash = new BigInteger(String.valueOf( this.secondaryHash.Hash(x)) );
+			 index = new BigInteger(String.valueOf(i));
+			 mult = secondHash.multiply(index);
+			len = new BigInteger(String.valueOf(this.tableLen));
+			mult.mod(len);
+			B_mult_I = mult.intValue();
+
+		}
+
+		if (a > Integer.MAX_VALUE - B_mult_I){
+			firstHash = new BigInteger(String.valueOf(a));
+			mult = new BigInteger(String.valueOf(B_mult_I));
+			mult = mult.add(firstHash); // a + b*i
+			len = new BigInteger(String.valueOf(this.tableLen));
+			mult = mult.mod(len); // a + b*i mod m
+			expectedValue = mult.intValue();
+		}
+		return expectedValue;
+
 	}
 	
 }

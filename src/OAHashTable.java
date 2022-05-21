@@ -24,6 +24,9 @@ public abstract class OAHashTable implements IHashTable {
 	public int FindIndex(long key) {
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
+			if (hashVal < 0 || hashVal > this.tableLen ){
+				System.out.println("Why");
+			}
 			HashTableElement current = this.table[hashVal];
 			if (current == null) {
 				return -1;
@@ -64,6 +67,7 @@ public abstract class OAHashTable implements IHashTable {
 	@Override
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
 		int find = FindIndex(hte.GetKey());
+
 		if (find != -1 && find != -2)
 		{
 			throw new KeyAlreadyExistsException(hte);
@@ -73,6 +77,7 @@ public abstract class OAHashTable implements IHashTable {
 		}
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(hte.GetKey(), i);
+
 			HashTableElement current = this.table[hashVal];
 //			try {
 //				current = this.table[hashVal];
