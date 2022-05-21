@@ -12,7 +12,7 @@ public class Experiments {
 //        quadraticExp(true);
         double [] average = {0,0,0,0};
         int m = 10000019;
-        for (int j = 0; j < 50 ; j ++) {
+        for (int j = 0; j < 10 ; j ++) {
             List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
             for (int i = 1; i < 5; i++) {
                 double time  = compareRuntimes( i, seq);
@@ -20,17 +20,17 @@ public class Experiments {
             }
         }
 
-            System.out.println("LPHashTable: " + average[0]/50);
-            System.out.println("QPHashTable: " + average[1]/50);
-            System.out.println("AQPHashTable: " + average[2]/50);
-            System.out.println("DoubleHashTable: " + average[3]/50);
+            System.out.println("LPHashTable: " + average[0]/10);
+            System.out.println("QPHashTable: " + average[1]/10);
+            System.out.println("AQPHashTable: " + average[2]/10);
+            System.out.println("DoubleHashTable: " + average[3]/10);
 
-
+//
 //        double [] average = {0,0,0,0};
 //        int m = 10000019;
 //        for (int j = 0; j < 1 ; j ++) {
 //            List<HashTableElement> seq = randomSequence((int) Math.floor((19.0 * m) / 20.0));
-//            for (int i = 1; i < 4; i++) {
+//            for (int i = 1; i < 5; i++) {
 //                if (i == 3){
 //                    continue;
 //                }
@@ -135,24 +135,18 @@ public class Experiments {
 //        System.out.println("COMPARING FOR: n = " + sequence.size());
         switch (tableNumber) {
             case 1: {
-
                 table = new LPHashTable(m, p);
                 break;
             }
             case 2: {
-
                 table = new QPHashTable(m, p);
                 break;
-
             }
             case 3: {
-
                 table = new AQPHashTable(m, p);
                 break;
-
             }
             case 4: {
-
                 table = new DoubleHashTable(m, p);
                 break;
             }

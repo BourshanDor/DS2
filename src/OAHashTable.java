@@ -28,7 +28,7 @@ public abstract class OAHashTable implements IHashTable {
 			if (current == null) {
 				return -1;
 			}
-			if (!(current instanceof DeletedHashTableElement) && current.GetKey() == key) {
+			if (!(current.GetKey() < 0 ) && current.GetKey() == key) {
 				return hashVal;
 //				return current.getIsDeleted() ? null : current;
 			}
@@ -80,7 +80,7 @@ public abstract class OAHashTable implements IHashTable {
 //				current = null;
 //			}
 			
-			if (current == null || current instanceof DeletedHashTableElement) {
+			if (current == null || current.GetKey() < 0 ) {
 				this.table[hashVal] = hte;
 				this.freeSlots--;
 				return;
@@ -96,8 +96,7 @@ public abstract class OAHashTable implements IHashTable {
 			throw new KeyDoesntExistException(key);
 		}
 		this.freeSlots++;
-		DeletedHashTableElement element = new DeletedHashTableElement(this.table[index].GetKey(), this.table[index].GetValue());
-		this.table[index] = element;
+		this.table[index] = new HashTableElement(-1,0);
 	}
 
 

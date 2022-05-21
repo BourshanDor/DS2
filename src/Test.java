@@ -22,7 +22,7 @@ public class Test {
         }
 
         public void Insert(HashTableElement hte) throws TableIsFullException, KeyAlreadyExistsException {
-            if (real.containsKey(hte.GetKey()) && ! (hte instanceof DeletedHashTableElement))
+            if (real.containsKey(hte.GetKey()) && ! (hte.GetKey() < 0 ))
                 throw new KeyAlreadyExistsException(hte);
 
             real.put(hte.GetKey(), hte);
