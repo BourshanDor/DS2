@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,6 +11,7 @@ public class Experiments {
 //        groupSize(6571);
 //        check ( );
 //        quadraticExp(true);
+        question5();
         double [] average = {0,0,0,0};
         int m = 10000019;
         for (int j = 0; j < 10 ; j ++) {
@@ -183,4 +185,37 @@ public class Experiments {
         }
         return sequence;
     }
+
+    public static void question5() throws Exception {
+        System.out.println("#### QUESTION 5 ####");
+        long start, finish;
+        double runtime;
+        double firstHalf = 0, secondHalf = 0;
+        int m = 10000019;
+        long p = 1000000007;
+        IHashTable hashTable = new DoubleHashTable(m, p);
+        for (int i = 0; i < 6; i++) {
+            List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
+            for (HashTableElement element : seq) {
+                hashTable.Insert(element);
+            }
+            start = System.nanoTime();
+            for (HashTableElement element : seq) {
+                hashTable.Delete(element.GetKey());
+            }
+            finish = System.nanoTime();
+            runtime = (finish - start) / 1000000000.0;
+            if (i < 3) {
+                firstHalf += runtime;
+            } else {
+                secondHalf += runtime;
+            }
+            System.out.printf("Iteration %d: %f%n", i, runtime);
+        }
+        System.out.println("First half: " + firstHalf);
+        System.out.println("Second half: " + secondHalf);
+        System.out.println("#### END QUESTION 5 ####");
+    }
 }
+
+
