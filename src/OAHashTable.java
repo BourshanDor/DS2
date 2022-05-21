@@ -24,16 +24,12 @@ public abstract class OAHashTable implements IHashTable {
 	public int FindIndex(long key) {
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
-			if (hashVal < 0 || hashVal > this.tableLen ){
-				System.out.println("Why");
-			}
 			HashTableElement current = this.table[hashVal];
 			if (current == null) {
 				return -1;
 			}
 			if (!(current.GetKey() < 0 ) && current.GetKey() == key) {
 				return hashVal;
-//				return current.getIsDeleted() ? null : current;
 			}
 
 		}
@@ -50,20 +46,9 @@ public abstract class OAHashTable implements IHashTable {
 
 			return this.table[index];
 		}
-//		for (int i = 0; i < this.tableLen; i++) {
-//			int hashVal = Hash(key, i);
-//			HashTableElement current = this.table[hashVal];
-//			if (current == null) {
-//				return null;
-//			}
-//			if (current.GetKey() == key) {
-//				return current instanceof DeletedHashTableElement ? null : current;
-////				return current.getIsDeleted() ? null : current;
-//			}
-//		}
-//		return null;
+
 	}
-	
+
 	@Override
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
 		int find = FindIndex(hte.GetKey());
@@ -79,12 +64,7 @@ public abstract class OAHashTable implements IHashTable {
 			int hashVal = Hash(hte.GetKey(), i);
 
 			HashTableElement current = this.table[hashVal];
-//			try {
-//				current = this.table[hashVal];
-//			} catch (NullPointerException e) {
-//				current = null;
-//			}
-			
+
 			if (current == null || current.GetKey() < 0 ) {
 				this.table[hashVal] = hte;
 				this.freeSlots--;
@@ -104,18 +84,6 @@ public abstract class OAHashTable implements IHashTable {
 		this.table[index] = new HashTableElement(-1,0);
 	}
 
-
-//	@Override
-//	public void Delete(long key) throws KeyDoesntExistException {
-//		HashTableElement element = Find(key);
-//		if (element == null) {
-//			throw new KeyDoesntExistException(key);
-//		}
-//		this.freeSlots++;
-//		DeletedHashTableElement elem = new DeletedHashTableElement(element.GetKey(), element.GetValue());
-//		element.setIsDeleted(true);
-//	}
-//
 	/**
 	 * 
 	 * @param x - the key to hash
