@@ -26,7 +26,9 @@ public class Test {
                 throw new KeyAlreadyExistsException(hte);
 
             real.put(hte.GetKey(), hte);
-            if (real.size() > m) throw new TableIsFullException(hte);
+            if (real.size() > m) {
+                throw new TableIsFullException(hte);
+            }
         }
 
         public void Delete(long key) throws KeyDoesntExistException {
@@ -83,12 +85,12 @@ public class Test {
         // ^^^^^^^^^^ //
 
         Random rng = new Random();
-        RealHashTable rht = new RealHashTable(5000, 10009  );
+        RealHashTable rht = new RealHashTable(10007, 10009  );
 
         for (int i = 0; i < 1000; i++) {
             // choose random operation
             int randomOperation = rng.nextInt(3);  // insert delete or find
-            long key = rng.nextInt(1000);
+            long key = rng.nextInt(10009);
 
             if (randomOperation == 0) {
                 if (VERBOSE) System.out.println("insert " + key);
@@ -113,9 +115,14 @@ public class Test {
                         e2 = e;
                     }
                 }
-                if (!Objects.equals(e1.getClass(), e2.getClass())) { System.out.println("FAILED: insert, e1 != e2: " + e1 + ", " + e2); return false; }
+                if (!Objects.equals(e1.getClass(), e2.getClass()))
+                {
+                    System.out.println("FAILED: insert, e1 != e2: " + e1 + ", " + e2); return false;
+                }
             } else if (randomOperation == 1) {
-                if (VERBOSE) System.out.println("         delete " + key);
+                if (VERBOSE) {
+                    System.out.println("         delete " + key);
+                }
                 // delete
                 String e1 = "", e2 = "";
                 try {
@@ -130,7 +137,10 @@ public class Test {
 
                     e2 = e.getClass().getName();
                 }
-                if (!e1.equals(e2)) { System.out.println("FAILED: delete, e1 != e2: " + e1 + ", " + e2); return false; }
+                if (!e1.equals(e2))
+                {
+                    System.out.println("FAILED: delete, e1 != e2: " + e1 + ", " + e2); return false;
+                }
             } else if (randomOperation == 2) {
                 if (VERBOSE) System.out.println("                  find " + key);
                 // find
@@ -148,7 +158,10 @@ public class Test {
 
                     e2 = e.getClass().getName();
                 }
-                if (e1 != e2) { System.out.println("FAILED: find, e1 != e2: " + e1 + ", " + e2); return false; }
+                if (e1 != e2)
+                {
+                    System.out.println("FAILED: find, e1 != e2: " + e1 + ", " + e2); return false;
+                }
                 if (!Objects.equals(v1, v2)) {
                     System.out.println("FAILED: find, v1 != v2");
                     return false;

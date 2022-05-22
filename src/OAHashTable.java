@@ -3,11 +3,8 @@ import java.util.Objects;
 public abstract class OAHashTable implements IHashTable {
 	
 	private HashTableElement [] table;
-	protected int tableLen;
-	private int freeSlots;
-
-
-
+	protected long tableLen;
+	private long freeSlots;
 	
 	public OAHashTable(int m) {
 		this.table = new HashTableElement[m];
@@ -15,31 +12,48 @@ public abstract class OAHashTable implements IHashTable {
 		this.freeSlots = m;
 	}
 
-	public int getFreeSlots(){
+	public long getFreeSlots(){
 		return freeSlots;
 	}
-	public int getTableLen(){
+	public long getTableLen(){
 		return tableLen;
 	}
+	public void setFreeSlots(long free){
+		this.freeSlots = free;
+	}
+
+	/**
+	 * -1 - there is null in the sequence
+	 * -2 - all the element in the sequence are real
+	 * -3 - the sequence is full but have deleted elements
+	 *
+	 * @param key
+	 * @return
+	 */
 	public int FindIndex(long key) {
+		boolean flag = false ;
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
 			HashTableElement current = this.table[hashVal];
-			if (current == null) {
+			if (current == null ) // change
+			{
 				return -1;
+			}
+			if (current.GetKey() < 0){
+				flag = true;
 			}
 			if (!(current.GetKey() < 0 ) && current.GetKey() == key) {
 				return hashVal;
 			}
-
 		}
-		return -2;     // the sequence is full
+
+		return flag? -3 : -2;                              // the sequence is full
 	}
 	
 	@Override
 	public HashTableElement Find(long key) {
 		int index = this.FindIndex(key);
-		if (index == -1 || index == -2 ){
+		if (index == -1 || index == -2 || index == -3 ){
 			return null;
 		}
 		else {
@@ -53,11 +67,11 @@ public abstract class OAHashTable implements IHashTable {
 	public void Insert(HashTableElement hte) throws TableIsFullException,KeyAlreadyExistsException {
 		int find = FindIndex(hte.GetKey());
 
-		if (find != -1 && find != -2)
+		if (find != -1 && find != -2 && find !=-3)
 		{
 			throw new KeyAlreadyExistsException(hte);
 		}
-		if (this.freeSlots == 0 || find == -2) {
+		if (this.getFreeSlots() == 0 || find == -2) {
 			throw new TableIsFullException(hte);
 		}
 		for (int i = 0; i < this.tableLen; i++) {
@@ -67,7 +81,7 @@ public abstract class OAHashTable implements IHashTable {
 
 			if (current == null || current.GetKey() < 0 ) {
 				this.table[hashVal] = hte;
-				this.freeSlots--;
+				this.setFreeSlots(this.getFreeSlots() - 1);
 				return;
 			}
 
@@ -77,10 +91,10 @@ public abstract class OAHashTable implements IHashTable {
 	@Override
 	public void Delete(long key) throws KeyDoesntExistException {
 		int index  = FindIndex(key);
-		if (index == -1 || index == -2) {
+		if (index == -1 || index == -2 || index == -3) {
 			throw new KeyDoesntExistException(key);
 		}
-		this.freeSlots++;
+		this.setFreeSlots(this.getFreeSlots() + 1);
 		this.table[index] = new HashTableElement(-1,0);
 	}
 

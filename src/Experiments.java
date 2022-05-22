@@ -10,22 +10,24 @@ public class Experiments {
 //        System.out.println("Q3.1 : ");
 //        groupSize(6571);
 //        check ( );
-//        quadraticExp(true);
-        question5();
+        quadraticExp(true);
+        for (int j = 0 ; j < 50 ; j++) {
+            question5();
+        }
         double [] average = {0,0,0,0};
         int m = 10000019;
         for (int j = 0; j < 100 ; j ++) {
             List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
-//            for (int i = 1; i < 5; i++) {
-                double time  = compareRuntimes( 2, seq);
-                average[2-1] +=  time ;
-//            }
+            for (int i = 1; i < 5; i++) {
+                double time  = compareRuntimes( i, seq);
+                average[i] +=  time ;
+            }
         }
 
-            System.out.println("LPHashTable: " + average[0]/10);
-            System.out.println("QPHashTable: " + average[1]/10);
-            System.out.println("AQPHashTable: " + average[2]/10);
-            System.out.println("DoubleHashTable: " + average[3]/10);
+            System.out.println("LPHashTable: " + average[0]/100);
+            System.out.println("QPHashTable: " + average[1]/100);
+            System.out.println("AQPHashTable: " + average[2]/100);
+            System.out.println("DoubleHashTable: " + average[3]/100);
 
 
 //        double [] average = {0,0,0,0};
@@ -104,7 +106,7 @@ public class Experiments {
         Random random = new Random();
         int b;
         long a;
-        int m = 6577;
+        int m = 6571;
         long p = 1000000007;
         HashTableElement element;
         for (int i = 0; i < 100; i++) {
