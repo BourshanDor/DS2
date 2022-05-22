@@ -23,20 +23,21 @@ public abstract class OAHashTable implements IHashTable {
 	}
 
 	/**
-	 * -1 - there is null in the sequence
-	 * -2 - all the element in the sequence are real
-	 * -3 - the sequence is full but have deleted elements
-	 *
-	 * @param key
-	 * @return
+	 * Finding the index in the Hash Table that the element sitting it, by element key
+	 * Complexity : O(table length) (permutation)
+	 * @param key - The key of an element that required to find in the Hash Table.
+	 * @return if the key found in the table return the index of him in the table else return :
+	 * 			-1 : There is object in the probing sequence such that object is null.
+	 * 			-2 : All the element in the probing sequence are real (real := not null or objects that deleted).
+	 * 			-3 : There is deleted element in the probing sequence.
 	 */
 	public int FindIndex(long key) {
+
 		boolean flag = false ;
 		for (int i = 0; i < this.tableLen; i++) {
 			int hashVal = Hash(key, i);
 			HashTableElement current = this.table[hashVal];
-			if (current == null ) // change
-			{
+			if (current == null ) {
 				return -1;
 			}
 			if (current.GetKey() < 0){
@@ -46,8 +47,7 @@ public abstract class OAHashTable implements IHashTable {
 				return hashVal;
 			}
 		}
-
-		return flag? -3 : -2;                              // the sequence is full
+		return flag? -3 : -2;
 	}
 	
 	@Override
@@ -57,10 +57,8 @@ public abstract class OAHashTable implements IHashTable {
 			return null;
 		}
 		else {
-
 			return this.table[index];
 		}
-
 	}
 
 	@Override
@@ -84,7 +82,6 @@ public abstract class OAHashTable implements IHashTable {
 				this.setFreeSlots(this.getFreeSlots() - 1);
 				return;
 			}
-
 		}
 	}
 

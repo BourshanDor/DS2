@@ -198,10 +198,11 @@ public class Experiments {
         IHashTable hashTable = new DoubleHashTable(m, p);
         for (int i = 0; i < 6; i++) {
             List<HashTableElement> seq = randomSequence((int) Math.floor(m / 2.0));
+            start = System.nanoTime();
             for (HashTableElement element : seq) {
                 hashTable.Insert(element);
             }
-            start = System.nanoTime();
+
             for (HashTableElement element : seq) {
                 hashTable.Delete(element.GetKey());
             }

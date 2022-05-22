@@ -26,23 +26,27 @@ public class ModHash {
 		return (int) (((this.a * key + this.b) % this.p) % this.m);
 	}
 
+	/**
+	 * Produces function from the family of function wear the form   f:[p] → [k] ,   x (mod k) + 1
+	 * This class randomly choose k from the set {1, 2, ..., m-1}
+	 */
 	public static class StepHash {
 		private final long m;
-		private final long a;
+		private final long k;
 
 		public StepHash(long m, long a) {
 			this.m = m;
-			this.a = a;
+			this.k = a;
 		}
 		public static StepHash GetFunc(int m){
 
-			long a = ThreadLocalRandom.current().nextLong(1,m);
-			return new StepHash(m,a);
+			long k = ThreadLocalRandom.current().nextLong(1,m);
+			return new StepHash(m,k);
 		}
 
 		public int Hash(long key) {
 
-			return (int) ((key) % this.a + 1);
+			return (int) ((key) % this.k + 1);
 		}
 
 	}
